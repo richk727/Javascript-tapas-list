@@ -20,7 +20,7 @@
       <li>Loading Tapas...</li>
     </ul>
 
-    <button class="btn-master" data-control="select">Check all</button> / <button class="btn-master" data-control="deselect">Uncheck all</button>
+    <button class="btn btn-master" data-control="select">Check all</button> / <button class="btn btn-master" data-control="deselect">Uncheck all</button>
 
     <form class="add-items">      
       <input type="text" name="item" placeholder="Item Name" required>
@@ -32,8 +32,8 @@
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
   const items = JSON.parse(localStorage.getItem('items')) || [];
-  // Create array for each master control
   const masterControls = Array.from(document.querySelectorAll('.btn-master'));
+  const removeItems = Array.from(document.querySelectorAll('.btn-remove'));
 
   function addItem(e) {
     e.preventDefault();
@@ -48,14 +48,23 @@
     this.reset();
   }
 
+  function removeItem(e) {
+    // Check if remove button was clicked for item
+    if(!e.target.matches('.btn-remove')) return;
+    const index =  e.target.dataset.index;
+    items.splice(index);
+    populateList(items, itemsList);
+    localStorage.setItem('items', JSON.stringify(items));
+  }
+
   function populateList(plates = [], platesList) {
     platesList.innerHTML = plates.map((plate, i) => {
       return `
         <li>
           <input class="check" type="checkbox" data-index="${i}" id="item${i}" ${plate.done ? 'checked' : ''}>
           <label for="item${i}">${plate.itemName}</label>
-        </li>
-      
+          <button class="btn btn-remove" id="remove-item${i}" data-index="${i}">❌</button>
+        </li>      
       `;
     }).join('');
   }
@@ -82,10 +91,11 @@
     populateList(items, itemsList);
   }
 
-
   addItems.addEventListener('submit', addItem);
   itemsList.addEventListener('click', toggleDone);
+  itemsList.addEventListener('click', removeItem);
   masterControls.forEach(masterControl => masterControl.addEventListener('click', masterToggle));
+
 
   populateList(items, itemsList);
 </script>
