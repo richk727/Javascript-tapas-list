@@ -108,3 +108,16 @@ h2 {
 .btn-remove:hover {
   opacity: 1;
 }
+
+.btn-clear-list {
+  margin-top: 15px;
+}
+
+.master-controls {
+  opacity: 0;
+  transition: opacity .175s ease-in-out;
+}
+
+.master-controls.visible {
+  opacity: 1;
+}
