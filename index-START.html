@@ -18,7 +18,10 @@
     <p></p>
     <ul class="plates">
       <li>Loading Tapas...</li>
-    </ul>    
+    </ul>
+
+    <button class="btn-master" data-control="select">Check all</button> / <button class="btn-master" data-control="deselect">Uncheck all</button>
+
     <form class="add-items">      
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">      
@@ -29,6 +32,8 @@
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
   const items = JSON.parse(localStorage.getItem('items')) || [];
+  // Create array for each master control
+  const masterControls = Array.from(document.querySelectorAll('.btn-master'));
 
   function addItem(e) {
     e.preventDefault();
@@ -65,9 +70,9 @@
     populateList(items, itemsList);
   }
 
-  function checkList(e) {
-    const selectOption = e.target.dataset.select;
-    const state = (selectOption === 'true') ? true : false;
+  function masterToggle(e) {
+    const selectOption = e.target.dataset.control;
+    const state = (selectOption === 'select') ? true : false;
 
     items.forEach(function(item){
        item.done = state;
@@ -80,6 +85,7 @@
 
   addItems.addEventListener('submit', addItem);
   itemsList.addEventListener('click', toggleDone);
+  masterControls.forEach(masterControl => masterControl.addEventListener('click', masterToggle));
 
   populateList(items, itemsList);
 </script>
